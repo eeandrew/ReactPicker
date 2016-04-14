@@ -1,0 +1,18 @@
+.picker-bg {
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	top: 0;
+	list-style: none;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	.picker-bg-item {
+		border-bottom: 1px solid #3d4145;
+		flex:1;
+	}
+	.picker-bg-item:last-child {
+		border-bottom: 0;
+	}
+}
