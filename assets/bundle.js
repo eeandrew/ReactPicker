@@ -63,13 +63,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Scroller = __webpack_require__(167);
+	var _Picker = __webpack_require__(169);
 
-	var _Scroller2 = _interopRequireDefault(_Scroller);
-
-	var _PickerBg = __webpack_require__(166);
-
-	var _PickerBg2 = _interopRequireDefault(_PickerBg);
+	var _Picker2 = _interopRequireDefault(_Picker);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79,32 +75,38 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var items = [{ label: 'item1', key: '1' }, { label: 'item2', key: '2' }, { label: 'item3', key: '3' }, { label: 'item4', key: '4' }, { label: 'item5', key: '5' }, { label: 'item6', key: '6' }, { label: 'item7', key: '7' }, { label: 'item8', key: '8' }];
+	var column1 = ['item1', 'item2', 'item3'];
+	var column2 = ['item4', 'item5', 'item6'];
+
+	var onFirstColumnItemSelected = function onFirstColumnItemSelected(index, value) {
+	  console.log(index + ' ' + value);
+	};
+
+	var columns = [{
+	  values: column1,
+	  activeIndex: 1,
+	  onItemSelected: onFirstColumnItemSelected
+	}, {
+	  values: column2
+	}];
 
 	var App = function (_React$Component) {
-		_inherits(App, _React$Component);
+	  _inherits(App, _React$Component);
 
-		function App() {
-			_classCallCheck(this, App);
+	  function App() {
+	    _classCallCheck(this, App);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-		}
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	  }
 
-		_createClass(App, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ style: { display: 'flex', position: 'relative' } },
-					_react2.default.createElement(_Scroller2.default, { items: items }),
-					_react2.default.createElement(_Scroller2.default, { items: items }),
-					_react2.default.createElement(_Scroller2.default, { items: items }),
-					_react2.default.createElement(_PickerBg2.default, null)
-				);
-			}
-		}]);
+	  _createClass(App, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(_Picker2.default, { columns: columns });
+	    }
+	  }]);
 
-		return App;
+	  return App;
 	}(_react2.default.Component);
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
@@ -19711,320 +19713,191 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 160 */,
-/* 161 */,
-/* 162 */,
-/* 163 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 164 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
+	'use strict';
 
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	var _react = __webpack_require__(148);
 
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
+	var _react2 = _interopRequireDefault(_react);
 
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
+	var _reactDom = __webpack_require__(2);
 
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
+	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
+	var _iscrollProbeMin = __webpack_require__(161);
 
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
+	var _iscrollProbeMin2 = _interopRequireDefault(_iscrollProbeMin);
 
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
+	__webpack_require__(162);
 
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-		update(obj);
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
+	var ROWS_PER_PAGE = 3;
 
-	var replaceText = (function () {
-		var textStore = [];
+	var Scroller = function (_React$Component) {
+	  _inherits(Scroller, _React$Component);
 
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
+	  function Scroller(props) {
+	    _classCallCheck(this, Scroller);
 
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Scroller).call(this, props));
 
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
+	    _this.bindFunc();
+	    _this.state = {
+	      snapHeight: 0,
+	      activeIndex: 0
+	    };
+	    return _this;
+	  }
 
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
+	  _createClass(Scroller, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.setState({
+	        activeIndex: this.props.activeIndex
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var pickerDOM = _reactDom2.default.findDOMNode(this);
+	      var rowHeight = pickerDOM.offsetHeight / ROWS_PER_PAGE;
+	      var scrollOption = {
+	        scrollX: false,
+	        scrollY: true,
+	        momentum: true,
+	        snap: 'li',
+	        keyBindings: true
+	      };
+	      this.setState({
+	        snapHeight: rowHeight
+	      });
+	      this.IScroll = new _iscrollProbeMin2.default(pickerDOM, scrollOption);
+	      this.IScroll.on('scrollEnd', this._onScrollEnd.bind(this));
+	      this.resetScroller();
+	    }
+	  }, {
+	    key: 'omponentWillUnmount',
+	    value: function omponentWillUnmount() {
+	      if (this.IScroll) {
+	        this.IScroll.destroy();
+	        this.IScroll = null;
+	      }
+	    }
+	  }, {
+	    key: 'resetScroller',
+	    value: function resetScroller() {
+	      var _this2 = this;
 
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
+	      setTimeout(function () {
+	        _this2.IScroll.refresh();
+	        _this2.IScroll.scrollTo(0, _this2.state.snapHeight * _this2.props.activeIndex * -1, 300);
+	      }, 1);
+	    }
+	  }, {
+	    key: '_onScrollEnd',
+	    value: function _onScrollEnd() {
+	      var activeIndex = Math.round(Math.abs(this.IScroll.y) / this.state.snapHeight);
+	      this.setState({
+	        activeIndex: activeIndex
+	      });
+	      if (typeof this.props.onItemSelected === 'function') {
+	        this.props.onItemSelected.call(null, activeIndex, this.props.items[activeIndex]);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'scroller-wrapper' },
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'scroller' },
+	          this._getChildren()
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_getPlaceHolder',
+	    value: function _getPlaceHolder(key) {
+	      return _react2.default.createElement('li', { className: 'item', style: { height: this.state.snapHeight }, key: key });
+	    }
+	  }, {
+	    key: '_getChildren',
+	    value: function _getChildren() {
+	      var _this3 = this;
 
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
+	      var children = this.props.items.map(function (item, index) {
+	        var className = "item " + (index === _this3.state.activeIndex ? 'active' : '');
+	        return _react2.default.createElement(
+	          'li',
+	          { className: className, style: { height: _this3.state.snapHeight, justifyContent: _this3._getAlignment() }, key: index },
+	          item
+	        );
+	      });
+	      return [this._getPlaceHolder(-1)].concat(_toConsumableArray(children), [this._getPlaceHolder(-2)]);
+	    }
+	  }, {
+	    key: '_getAlignment',
+	    value: function _getAlignment() {
+	      var align = this.props.align.toUpperCase();
+	      switch (align) {
+	        case 'CENTER':
+	          return 'center';
+	        case 'LEFT':
+	          return 'flex-start';
+	        case 'RIGHT':
+	          return 'flex-end';
+	      }
+	    }
+	  }, {
+	    key: 'bindFunc',
+	    value: function bindFunc() {
+	      this._getChildren.bind(this);
+	      this._getPlaceHolder.bind(this);
+	      this._onScrollEnd.bind(this);
+	      this._getAlignment.bind(this);
+	      this.resetScroller.bind(this);
+	    }
+	  }]);
 
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
+	  return Scroller;
+	}(_react2.default.Component);
 
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
+	exports.default = Scroller;
 
-		var blob = new Blob([css], { type: "text/css" });
 
-		var oldSrc = linkElement.href;
+	Scroller.propTypes = {
+	  items: _react2.default.PropTypes.array,
+	  activeIndex: _react2.default.PropTypes.number,
+	  align: _react2.default.PropTypes.string, //center left right
+	  onItemSelected: _react2.default.PropTypes.func
+	};
 
-		linkElement.href = URL.createObjectURL(blob);
-
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
+	Scroller.defaultProps = {
+	  activeIndex: 0,
+	  align: 'center'
+	};
 
 /***/ },
-/* 165 */
+/* 161 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20396,6 +20269,356 @@
 	}(window, document, Math);
 
 /***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(163);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(165)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Scroller.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Scroller.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(164)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".scroller-wrapper {\n  width: 100%;\n  height: 200px;\n  position: relative;\n  overflow: hidden;\n}\n.scroller-wrapper .scroller {\n  list-style: none;\n  position: absolute;\n  z-index: 1;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n  width: 100%;\n}\n.scroller-wrapper .scroller .item {\n  width: 100%;\n  color: #9dacb6;\n  display: flex;\n  display: -webkit-flex;\n  justify-content: center;\n  align-items: center;\n}\n.scroller-wrapper .scroller .item.active {\n  color: #13334d;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 164 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
 /* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -20415,7 +20638,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	__webpack_require__(170);
+	__webpack_require__(167);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20467,213 +20690,13 @@
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(148);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(2);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _iscrollProbeMin = __webpack_require__(165);
-
-	var _iscrollProbeMin2 = _interopRequireDefault(_iscrollProbeMin);
-
-	__webpack_require__(168);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ROWS_PER_PAGE = 3;
-
-	var Scroller = function (_React$Component) {
-	  _inherits(Scroller, _React$Component);
-
-	  function Scroller(props) {
-	    _classCallCheck(this, Scroller);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Scroller).call(this, props));
-
-	    _this.bindFunc();
-	    _this.state = {
-	      snapHeight: 0,
-	      activeIndex: 0
-	    };
-	    return _this;
-	  }
-
-	  _createClass(Scroller, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.setState({
-	        activeIndex: this.props.activeIndex
-	      });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
-
-	      var pickerDOM = _reactDom2.default.findDOMNode(this);
-	      var rowHeight = pickerDOM.offsetHeight / ROWS_PER_PAGE;
-	      var scrollOption = {
-	        scrollX: false,
-	        scrollY: true,
-	        momentum: true,
-	        snap: 'li',
-	        keyBindings: true
-	      };
-	      this.setState({
-	        snapHeight: rowHeight
-	      });
-	      this.IScroll = new _iscrollProbeMin2.default(pickerDOM, scrollOption);
-	      this.IScroll.on('scrollEnd', this._onScrollEnd.bind(this));
-	      setTimeout(function () {
-	        _this2.IScroll.refresh();
-	      }, 1);
-	    }
-	  }, {
-	    key: 'omponentWillUnmount',
-	    value: function omponentWillUnmount() {
-	      if (this.IScroll) {
-	        this.IScroll.destroy();
-	        this.IScroll = null;
-	      }
-	    }
-	  }, {
-	    key: '_onScrollEnd',
-	    value: function _onScrollEnd() {
-	      var activeIndex = Math.round(Math.abs(this.IScroll.y) / this.state.snapHeight);
-	      this.setState({
-	        activeIndex: activeIndex
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'scroller-wrapper' },
-	        _react2.default.createElement(
-	          'ul',
-	          { className: 'scroller' },
-	          this._getChildren()
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_getPlaceHolder',
-	    value: function _getPlaceHolder(key) {
-	      return _react2.default.createElement('li', { className: 'item', style: { height: this.state.snapHeight }, key: key });
-	    }
-	  }, {
-	    key: '_getChildren',
-	    value: function _getChildren() {
-	      var _this3 = this;
-
-	      var children = this.props.items.map(function (item, index) {
-	        var className = "item " + (index === _this3.state.activeIndex ? 'active' : '');
-	        return _react2.default.createElement(
-	          'li',
-	          { className: className, style: { height: _this3.state.snapHeight }, key: item.key },
-	          item.label
-	        );
-	      });
-	      return [this._getPlaceHolder(-1)].concat(_toConsumableArray(children), [this._getPlaceHolder(-2)]);
-	    }
-	  }, {
-	    key: 'bindFunc',
-	    value: function bindFunc() {
-	      this._getChildren.bind(this);
-	      this._getPlaceHolder.bind(this);
-	      this._onScrollEnd.bind(this);
-	    }
-	  }]);
-
-	  return Scroller;
-	}(_react2.default.Component);
-
-	exports.default = Scroller;
-
-
-	Scroller.propTypes = {
-	  items: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
-	    label: _react2.default.PropTypes.string,
-	    key: _react2.default.PropTypes.string
-	  })),
-	  activeIndex: _react2.default.PropTypes.number
-	};
-
-	Scroller.defaultProps = {
-	  activeIndex: 0
-	};
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(169);
+	var content = __webpack_require__(168);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(164)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Scroller.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Scroller.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(163)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".scroller-wrapper {\n  width: 100%;\n  height: 200px;\n  position: relative;\n  overflow: hidden;\n}\n.scroller-wrapper .scroller {\n  list-style: none;\n  position: absolute;\n  z-index: 1;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n  width: 100%;\n}\n.scroller-wrapper .scroller .item {\n  width: 100%;\n  color: #9dacb6;\n  display: flex;\n  display: -webkit-flex;\n  justify-content: center;\n  align-items: center;\n}\n.scroller-wrapper .scroller .item.active {\n  color: #13334d;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 170 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(171);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(164)(content, {});
+	var update = __webpack_require__(165)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20690,15 +20713,140 @@
 	}
 
 /***/ },
-/* 171 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(163)();
+	exports = module.exports = __webpack_require__(164)();
 	// imports
 
 
 	// module
 	exports.push([module.id, ".picker-bg {\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  top: 0;\n  list-style: none;\n  display: flex;\n  display: -webkit-flex;\n  flex-direction: column;\n}\n.picker-bg .picker-bg-item {\n  border-bottom: 1px solid #3d4145;\n  flex: 1;\n}\n.picker-bg .picker-bg-item:last-child {\n  border-bottom: 0;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(148);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	__webpack_require__(170);
+
+	var _Scroller = __webpack_require__(160);
+
+	var _Scroller2 = _interopRequireDefault(_Scroller);
+
+	var _PickerBg = __webpack_require__(166);
+
+	var _PickerBg2 = _interopRequireDefault(_PickerBg);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Picker = function (_React$Component) {
+	  _inherits(Picker, _React$Component);
+
+	  function Picker(props) {
+	    _classCallCheck(this, Picker);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Picker).call(this, props));
+
+	    _this._bindFunc();
+	    return _this;
+	  }
+
+	  _createClass(Picker, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { display: 'flex', position: 'relative' } },
+	        this._renderScrollers(),
+	        _react2.default.createElement(_PickerBg2.default, null)
+	      );
+	    }
+	  }, {
+	    key: '_renderScrollers',
+	    value: function _renderScrollers() {
+	      return this.props.columns.map(function (column, index) {
+	        return _react2.default.createElement(_Scroller2.default, { items: column.values, key: index, align: column.align, activeIndex: column.activeIndex, onItemSelected: column.onItemSelected });
+	      });
+	    }
+	  }, {
+	    key: '_bindFunc',
+	    value: function _bindFunc() {
+	      this._renderScrollers.bind(this);
+	    }
+	  }]);
+
+	  return Picker;
+	}(_react2.default.Component);
+
+	exports.default = Picker;
+
+
+	Picker.propTypes = {
+	  columns: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
+	    align: _react2.default.PropTypes.string,
+	    values: _react2.default.PropTypes.array,
+	    activeIndex: _react2.default.PropTypes.number,
+	    onItemSelected: _react2.default.PropTypes.func
+	  }))
+	};
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(171);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(165)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Picker.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./Picker.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(164)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "", ""]);
 
 	// exports
 
