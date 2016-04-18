@@ -1,0 +1,38 @@
+.slide-up {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	-webkit-transition-duration: 400ms;
+    transition-duration: 400ms;
+    transform: translate3d(0, 100%, 0);
+    -webkit-transform: translate3d(0, 100%, 0);
+    &.show {
+    	transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+	.slide-header {
+		height: 40px;
+		background-color: #F5F5F5;
+		position: relative;
+		.header-title {
+			text-align: center;
+			line-height: 40px;
+		}
+		.header-cacel-btn {
+			position: absolute;
+			left: 5px;
+			top: 0;
+			bottom: 0;
+			right: auto;
+			line-height: 40px;
+		}
+		.header-confirm-btn {
+			position: absolute;
+			left: auto;
+			top: 0;
+			bottom: 0;
+			right: 5px;
+			line-height: 40px;
+		}
+	}
+}

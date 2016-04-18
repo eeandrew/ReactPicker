@@ -2,6 +2,7 @@ import React from 'react';
 import './Picker.css';
 import Scroller from './Scroller.js';
 import PickerBg from './PickerBg.js';
+import SlideUp from './SlideUp.js';
 
 export default class Picker extends React.Component {
   constructor(props) {
@@ -10,10 +11,12 @@ export default class Picker extends React.Component {
   }
   render() {
     return (
-      <div style={{display:'flex',position:'relative'}}>
-       {this._renderScrollers()}
-        <PickerBg/>
-      </div>
+      <SlideUp isShown={this.props.shown} title={this.props.title}>
+        <div style={{display:'flex',position:'relative'}}>
+         {this._renderScrollers()}
+          <PickerBg/>
+        </div>
+      </SlideUp>
     );
   }
   _renderScrollers() {
@@ -33,4 +36,6 @@ Picker.propTypes = {
       activeIndex : React.PropTypes.number,
       onItemSelected : React.PropTypes.func,
   })),
+  shown: React.PropTypes.bool,
+  title: React.PropTypes.string
 }
