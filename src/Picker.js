@@ -11,7 +11,7 @@ export default class Picker extends React.Component {
   }
   render() {
     return (
-      <SlideUp isShown={this.props.shown} title={this.props.title}>
+      <SlideUp isShown={this.props.shown} title={this.props.title} onCancel={this.props.onCancel} onConfirm={this.props.onConfirm}>
         <div style={{display:'flex',position:'relative'}}>
          {this._renderScrollers()}
           <PickerBg/>
@@ -37,5 +37,7 @@ Picker.propTypes = {
       onItemSelected : React.PropTypes.func,
   })),
   shown: React.PropTypes.bool,
-  title: React.PropTypes.string
+  title: React.PropTypes.string,
+  onCancel: React.PropTypes.func,
+  onConfirm: React.PropTypes.func,
 }

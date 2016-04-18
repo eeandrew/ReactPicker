@@ -2,8 +2,8 @@
 	width: 100%;
 	position: fixed;
 	bottom: 0;
-	-webkit-transition-duration: 400ms;
-    transition-duration: 400ms;
+	-webkit-transition-duration: 200ms;
+    transition-duration: 200ms;
     transform: translate3d(0, 100%, 0);
     -webkit-transform: translate3d(0, 100%, 0);
     &.show {
