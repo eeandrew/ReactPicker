@@ -36,17 +36,30 @@ export default class Scroller extends React.Component {
     this.IScroll.on('scrollEnd',this._onScrollEnd.bind(this));
     this.resetScroller();
   }
-  omponentWillUnmount() {
+  componentWillUnmount() {
     if(this.IScroll) {
         this.IScroll.destroy();
         this.IScroll = null;
+    }
+  }
+  // componentDidUpdate() {
+  //   if(this.IScroll) {
+  //     setTimeout(()=>{
+  //       this.IScroll.refresh();
+  //     },1);
+  //   }
+  // }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.items.length !== this.props.items.length ||
+      nextProps.activeIndex !== this.props.activeIndex) {
+      this.resetScroller();
     }
   }
   resetScroller() {
     setTimeout(()=>{
       this.IScroll.refresh();
       this.IScroll.scrollTo(0,this.state.snapHeight*this.props.activeIndex*-1,300);
-    },1)
+    },1000/60)
   }
   _onScrollEnd() {
     let activeIndex = Math.round(Math.abs(this.IScroll.y) / this.state.snapHeight);

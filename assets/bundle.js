@@ -137,7 +137,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_DatePicker2.default, { shown: this.state.shown }),
+	        _react2.default.createElement(_DatePicker2.default, { shown: this.state.shown, title: '选择出生日期', onCancel: this.onCancel.bind(this) }),
 	        _react2.default.createElement(
 	          'button',
 	          { onClick: this.togglePicker.bind(this) },
@@ -20281,11 +20281,26 @@
 	      this.resetScroller();
 	    }
 	  }, {
-	    key: 'omponentWillUnmount',
-	    value: function omponentWillUnmount() {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
 	      if (this.IScroll) {
 	        this.IScroll.destroy();
 	        this.IScroll = null;
+	      }
+	    }
+	    // componentDidUpdate() {
+	    //   if(this.IScroll) {
+	    //     setTimeout(()=>{
+	    //       this.IScroll.refresh();
+	    //     },1);
+	    //   }
+	    // }
+
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.items.length !== this.props.items.length || nextProps.activeIndex !== this.props.activeIndex) {
+	        this.resetScroller();
 	      }
 	    }
 	  }, {
@@ -20296,7 +20311,7 @@
 	      setTimeout(function () {
 	        _this2.IScroll.refresh();
 	        _this2.IScroll.scrollTo(0, _this2.state.snapHeight * _this2.props.activeIndex * -1, 300);
-	      }, 1);
+	      }, 1000 / 60);
 	    }
 	  }, {
 	    key: '_onScrollEnd',
@@ -20791,7 +20806,7 @@
 
 
 	// module
-	exports.push([module.id, ".scroller-wrapper {\n  width: 100%;\n  height: 200px;\n  position: relative;\n  overflow: hidden;\n}\n.scroller-wrapper .scroller {\n  list-style: none;\n  position: absolute;\n  z-index: 1;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n  width: 100%;\n}\n.scroller-wrapper .scroller .item {\n  width: 100%;\n  color: #9dacb6;\n  display: flex;\n  display: -webkit-flex;\n  justify-content: center;\n  align-items: center;\n}\n.scroller-wrapper .scroller .item.active {\n  color: #13334d;\n}\n", ""]);
+	exports.push([module.id, ".scroller-wrapper {\n  width: 100%;\n  height: 200px;\n  position: relative;\n  overflow: hidden;\n}\n.scroller-wrapper .scroller {\n  list-style: none;\n  position: absolute;\n  z-index: 1;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n  width: 100%;\n}\n.scroller-wrapper .scroller .item {\n  width: 100%;\n  color: #9DACB6;\n  display: flex;\n  display: -webkit-flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 13px;\n  transition: font-size 0.05s linear;\n}\n.scroller-wrapper .scroller .item.active {\n  color: #13334d;\n  font-size: 15px;\n}\n", ""]);
 
 	// exports
 
@@ -20899,7 +20914,7 @@
 
 
 	// module
-	exports.push([module.id, ".picker-bg {\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  top: 0;\n  list-style: none;\n  display: flex;\n  display: -webkit-flex;\n  flex-direction: column;\n}\n.picker-bg .picker-bg-item {\n  border-bottom: 1px solid #3d4145;\n  flex: 1;\n}\n.picker-bg .picker-bg-item:last-child {\n  border-bottom: 0;\n}\n", ""]);
+	exports.push([module.id, ".picker-bg {\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  top: 0;\n  list-style: none;\n  display: flex;\n  display: -webkit-flex;\n  flex-direction: column;\n}\n.picker-bg .picker-bg-item {\n  border-bottom: 1px solid #D8E2E9;\n  flex: 1;\n}\n.picker-bg .picker-bg-item:last-child {\n  border-bottom: 0;\n}\n", ""]);
 
 	// exports
 
@@ -21033,7 +21048,7 @@
 
 
 	// module
-	exports.push([module.id, ".slide-up {\n  width: 100%;\n  position: fixed;\n  bottom: 0;\n  -webkit-transition-duration: 200ms;\n  transition-duration: 200ms;\n  transform: translate3d(0, 100%, 0);\n  -webkit-transform: translate3d(0, 100%, 0);\n}\n.slide-up.show {\n  transform: translate3d(0, 0, 0);\n  -webkit-transform: translate3d(0, 0, 0);\n}\n.slide-up .slide-header {\n  height: 40px;\n  background-color: #F5F5F5;\n  position: relative;\n}\n.slide-up .slide-header .header-title {\n  text-align: center;\n  line-height: 40px;\n}\n.slide-up .slide-header .header-cacel-btn {\n  position: absolute;\n  left: 5px;\n  top: 0;\n  bottom: 0;\n  right: auto;\n  line-height: 40px;\n}\n.slide-up .slide-header .header-confirm-btn {\n  position: absolute;\n  left: auto;\n  top: 0;\n  bottom: 0;\n  right: 5px;\n  line-height: 40px;\n}\n", ""]);
+	exports.push([module.id, ".slide-up {\n  width: 100%;\n  position: fixed;\n  bottom: 0;\n  -webkit-transition-duration: 200ms;\n  transition-duration: 200ms;\n  transform: translate3d(0, 100%, 0);\n  -webkit-transform: translate3d(0, 100%, 0);\n}\n.slide-up.show {\n  transform: translate3d(0, 0, 0);\n  -webkit-transform: translate3d(0, 0, 0);\n}\n.slide-up .slide-header {\n  height: 40px;\n  background-color: #F5F5F5;\n  position: relative;\n  border-bottom: 1px solid #9DACB6;\n}\n.slide-up .slide-header .header-title {\n  text-align: center;\n  line-height: 40px;\n  color: #13334D;\n  font-size: 14px;\n}\n.slide-up .slide-header .header-cacel-btn,\n.slide-up .slide-header .header-confirm-btn {\n  color: #55ACEE;\n  font-size: 14px;\n}\n.slide-up .slide-header .header-cacel-btn {\n  position: absolute;\n  left: 5px;\n  top: 0;\n  bottom: 0;\n  right: auto;\n  line-height: 40px;\n}\n.slide-up .slide-header .header-confirm-btn {\n  position: absolute;\n  left: auto;\n  top: 0;\n  bottom: 0;\n  right: 5px;\n  line-height: 40px;\n}\n", ""]);
 
 	// exports
 
@@ -21124,9 +21139,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var DATE_FORMAT = 'YYYY-MM-DD';
+	var DATE_FORMAT = 'YYYY-M-D';
 	var MONTHS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-	var DAYS = ['1日', '2日', '3日'];
 
 	var DatePicker = function (_React$Component) {
 	  _inherits(DatePicker, _React$Component);
@@ -21138,9 +21152,12 @@
 
 	    _this.bindFunc();
 	    _this.state = {
-	      years: [],
+	      years: _this._getYears().years,
+	      activeYearIndex: _this._getYears().activeYearIndex,
 	      months: MONTHS,
-	      days: DAYS
+	      activeMonthIndex: _this._getActiveMonth(),
+	      days: _this._getDays().days,
+	      activeDayIndex: _this._getDays().activeDayIndex
 	    };
 	    return _this;
 	  }
@@ -21155,38 +21172,99 @@
 	    value: function render() {
 	      var columns = [{
 	        align: 'right',
-	        values: this.state.years
+	        values: this.state.years,
+	        activeIndex: this.state.activeYearIndex,
+	        onItemSelected: this.onYearChanged
 	      }, {
 	        align: 'center',
-	        values: MONTHS
+	        values: MONTHS,
+	        activeIndex: this.state.activeMonthIndex,
+	        onItemSelected: this.onMonthChanged
 	      }, {
 	        align: 'left',
-	        values: this.state.days
+	        values: this.state.days,
+	        activeIndex: this.state.activeDayIndex,
+	        onItemSelected: this.state.onDayChanged
 	      }];
-	      return _react2.default.createElement(_Picker2.default, { columns: columns, title: this.props.title, shown: this.props.shown });
+	      return _react2.default.createElement(_Picker2.default, { columns: columns, title: this.props.title, shown: this.props.shown, onCancel: this.props.onCancel });
 	    }
 	  }, {
 	    key: 'bindFunc',
 	    value: function bindFunc() {
 	      this._getYears = this._getYears.bind(this);
 	      this._getDays = this._getDays.bind(this);
+	      this._getActiveMonth = this._getActiveMonth.bind(this);
+	      this.onMonthChanged = this.onMonthChanged.bind(this);
+	      this.onYearChanged = this.onYearChanged.bind(this);
+	      this.onDayChanged = this.onDayChanged.bind(this);
+	    }
+	  }, {
+	    key: 'onYearChanged',
+	    value: function onYearChanged(index, value) {
+	      this.setState({
+	        activeYearIndex: index
+	      });
+	    }
+	  }, {
+	    key: 'onMonthChanged',
+	    value: function onMonthChanged(index, value) {
+	      this.setState({
+	        activeMonthIndex: index
+	      });
+	      var days = [];
+	      var currentDate = this.state.years[this.state.activeYearIndex].match(/\d+/g)[0] + '-' + this.state.months[index].match(/\d+/g)[0];
+	      var lastDay = (0, _moment2.default)(currentDate, DATE_FORMAT).endOf('month').date();
+	      for (var i = 1; i <= lastDay; i++) {
+	        days.push([i, '日'].join(''));
+	      }
+	      console.log('lastDay ' + lastDay);
+	      console.log('activeDayIndex ' + this.state.activeDayIndex);
+	      var activeDayIndex = lastDay < this.state.activeDayIndex + 1 ? lastDay - 1 : this.state.activeDayIndex;
+	      console.log(activeDayIndex);
+	      this.setState({
+	        days: days,
+	        activeDayIndex: activeDayIndex
+	      });
+	    }
+	  }, {
+	    key: 'onDayChanged',
+	    value: function onDayChanged(index, value) {
+	      this.setState({
+	        activeDayIndex: index
+	      });
 	    }
 	  }, {
 	    key: '_getYears',
 	    value: function _getYears() {
-	      var minYear = (0, _moment2.default)(this.props.minDate).year();
-	      var maxYear = (0, _moment2.default)(this.props.maxDate).year();
+	      var minYear = (0, _moment2.default)(this.props.minDate, DATE_FORMAT).year();
+	      var maxYear = (0, _moment2.default)(this.props.maxDate, DATE_FORMAT).year();
+	      var activeYear = (0, _moment2.default)(this.props.initialDate, DATE_FORMAT).year();
+	      var activeYearIndex = activeYear - minYear;
 	      var years = [];
 	      for (var y = minYear; y <= maxYear; y++) {
 	        years.push([y, '年'].join(''));
 	      }
-	      this.setState({
-	        years: years
-	      });
+	      return { years: years, activeYearIndex: activeYearIndex };
+	    }
+	  }, {
+	    key: '_getActiveMonth',
+	    value: function _getActiveMonth() {
+	      var activeMonthIndex = (0, _moment2.default)(this.props.initialDate, DATE_FORMAT).month();
+	      return activeMonthIndex;
 	    }
 	  }, {
 	    key: '_getDays',
-	    value: function _getDays() {}
+	    value: function _getDays() {
+	      var days = [];
+	      var lastDay = (0, _moment2.default)(this.props.initialDate, DATE_FORMAT).endOf('month').date();
+	      for (var i = 1; i <= lastDay; i++) {
+	        days.push([i, '日'].join(''));
+	      }
+	      return {
+	        days: days,
+	        activeDayIndex: (0, _moment2.default)(this.props.initialDate, DATE_FORMAT).date() - 1
+	      };
+	    }
 	  }]);
 
 	  return DatePicker;
@@ -21205,10 +21283,12 @@
 	  maxDate: _react2.default.PropTypes.string,
 	  minDate: _react2.default.PropTypes.string,
 	  title: _react2.default.PropTypes.string,
-	  shown: _react2.default.PropTypes.bool
+	  shown: _react2.default.PropTypes.bool,
+	  onCancel: _react2.default.PropTypes.func
 	};
 
 	DatePicker.defaultProps = {
+	  initialDate: (0, _moment2.default)().format(DATE_FORMAT),
 	  maxDate: (0, _moment2.default)().add(60, 'y').format(DATE_FORMAT),
 	  minDate: (0, _moment2.default)().subtract(60, 'y').format(DATE_FORMAT)
 	};

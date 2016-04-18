@@ -14,9 +14,17 @@
 		height: 40px;
 		background-color: #F5F5F5;
 		position: relative;
+		border-bottom: 1px solid #9DACB6;
 		.header-title {
 			text-align: center;
 			line-height: 40px;
+			color:#13334D;
+			font-size: 14px;
+		}
+		.header-cacel-btn,
+		.header-confirm-btn {
+			color:#55ACEE;
+			font-size: 14px;
 		}
 		.header-cacel-btn {
 			position: absolute;

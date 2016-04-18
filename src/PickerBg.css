@@ -9,7 +9,7 @@
 	display: -webkit-flex;
 	flex-direction: column;
 	.picker-bg-item {
-		border-bottom: 1px solid #3d4145;
+		border-bottom: 1px solid #D8E2E9;
 		flex:1;
 	}
 	.picker-bg-item:last-child {

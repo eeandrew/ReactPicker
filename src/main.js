@@ -47,7 +47,7 @@ class App extends React.Component {
 	render() {
 		return (
       <div>
-       <DatePicker shown={this.state.shown}/>  
+       <DatePicker shown={this.state.shown} title="选择出生日期" onCancel={this.onCancel.bind(this)}/>  
        <button onClick={this.togglePicker.bind(this)}> Toggle </button>
       </div>
 		);
