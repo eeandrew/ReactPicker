@@ -52,6 +52,9 @@ export default class Scroller extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.items.length !== this.props.items.length ||
       nextProps.activeIndex !== this.props.activeIndex) {
+      this.setState({
+        activeIndex : nextProps.activeIndex
+      });
       this.resetScroller();
     }
   }

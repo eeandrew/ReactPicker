@@ -35,7 +35,7 @@ export default class DatePicker extends React.Component {
       align:'left',
       values: this.state.days,
       activeIndex: this.state.activeDayIndex,
-      onItemSelected: this.state.onDayChanged
+      onItemSelected: this.onDayChanged
     }]
     return <Picker columns={columns} title={this.props.title} shown={this.props.shown} onCancel={this.props.onCancel}/>
 	}
@@ -51,6 +51,7 @@ export default class DatePicker extends React.Component {
     this.setState({
       activeYearIndex:index
     });
+    this.onMonthChanged(this.state.activeMonthIndex);
   }
   onMonthChanged(index,value) {
     this.setState({
